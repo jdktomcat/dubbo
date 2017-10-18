@@ -480,6 +480,7 @@
                         </goals>
                     </execution>
                 </executions>
+                <version>3.0.0</version>
             </plugin>
         </plugins>
     </build>
