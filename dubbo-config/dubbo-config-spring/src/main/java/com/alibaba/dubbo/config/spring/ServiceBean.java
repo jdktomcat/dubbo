@@ -71,6 +71,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
 	    return SPRING_CONTEXT;
 	}
 
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 		SpringExtensionFactory.addApplicationContext(applicationContext);
@@ -96,10 +97,12 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
 		}
 	}
 
+	@Override
     public void setBeanName(String name) {
         this.beanName = name;
     }
 
+    @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (ContextRefreshedEvent.class.getName().equals(event.getClass().getName())) {
         	if (isDelay() && ! isExported() && ! isUnexported()) {
@@ -120,14 +123,15 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
         return supportedApplicationListener && (delay == null || delay.intValue() == -1);
     }
 
+    @Override
     @SuppressWarnings({ "unchecked", "deprecation" })
 	public void afterPropertiesSet() throws Exception {
         if (getProvider() == null) {
             Map<String, ProviderConfig> providerConfigMap = applicationContext == null ? null  : BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ProviderConfig.class, false, false);
             if (providerConfigMap != null && providerConfigMap.size() > 0) {
                 Map<String, ProtocolConfig> protocolConfigMap = applicationContext == null ? null  : BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ProtocolConfig.class, false, false);
-                if ((protocolConfigMap == null || protocolConfigMap.size() == 0)
-                        && providerConfigMap.size() > 1) { // 兼容旧版本
+                // 兼容旧版本
+                if ((protocolConfigMap == null || protocolConfigMap.size() == 0) && providerConfigMap.size() > 1) {
                     List<ProviderConfig> providerConfigs = new ArrayList<ProviderConfig>();
                     for (ProviderConfig config : providerConfigMap.values()) {
                         if (config.isDefault() != null && config.isDefault().booleanValue()) {
@@ -240,9 +244,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
             }
         }
         if (getPath() == null || getPath().length() == 0) {
-            if (beanName != null && beanName.length() > 0 
-                    && getInterface() != null && getInterface().length() > 0
-                    && beanName.startsWith(getInterface())) {
+            if (beanName != null && beanName.length() > 0  && getInterface() != null && getInterface().length() > 0 && beanName.startsWith(getInterface())) {
                 setPath(beanName);
             }
         }
@@ -251,6 +253,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
         }
     }
 
+    @Override
     public void destroy() throws Exception {
         unexport();
     }

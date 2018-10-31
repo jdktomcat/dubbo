@@ -42,6 +42,7 @@ public class SpringContainer implements Container {
 		return context;
 	}
 
+	@Override
 	public void start() {
         String configPath = ConfigUtils.getProperty(SPRING_CONFIG);
         if (configPath == null || configPath.length() == 0) {
@@ -51,6 +52,7 @@ public class SpringContainer implements Container {
         context.start();
     }
 
+    @Override
     public void stop() {
         try {
             if (context != null) {

@@ -89,20 +89,27 @@ public class RedisRegistry extends FailbackRegistry {
         config.testOnBorrow = url.getParameter("test.on.borrow", true);
         config.testOnReturn = url.getParameter("test.on.return", false);
         config.testWhileIdle = url.getParameter("test.while.idle", false);
-        if (url.getParameter("max.idle", 0) > 0)
+        if (url.getParameter("max.idle", 0) > 0) {
             config.maxIdle = url.getParameter("max.idle", 0);
-        if (url.getParameter("min.idle", 0) > 0)
+        }
+        if (url.getParameter("min.idle", 0) > 0) {
             config.minIdle = url.getParameter("min.idle", 0);
-        if (url.getParameter("max.active", 0) > 0)
+        }
+        if (url.getParameter("max.active", 0) > 0) {
             config.maxActive = url.getParameter("max.active", 0);
-        if (url.getParameter("max.wait", url.getParameter("timeout", 0)) > 0)
+        }
+        if (url.getParameter("max.wait", url.getParameter("timeout", 0)) > 0) {
             config.maxWait = url.getParameter("max.wait", url.getParameter("timeout", 0));
-        if (url.getParameter("num.tests.per.eviction.run", 0) > 0)
+        }
+        if (url.getParameter("num.tests.per.eviction.run", 0) > 0) {
             config.numTestsPerEvictionRun = url.getParameter("num.tests.per.eviction.run", 0);
-        if (url.getParameter("time.between.eviction.runs.millis", 0) > 0)
+        }
+        if (url.getParameter("time.between.eviction.runs.millis", 0) > 0) {
             config.timeBetweenEvictionRunsMillis = url.getParameter("time.between.eviction.runs.millis", 0);
-        if (url.getParameter("min.evictable.idle.time.millis", 0) > 0)
+        }
+        if (url.getParameter("min.evictable.idle.time.millis", 0) > 0) {
             config.minEvictableIdleTimeMillis = url.getParameter("min.evictable.idle.time.millis", 0);
+        }
         
         String cluster = url.getParameter("cluster", "failover");
         if (! "failover".equals(cluster) && ! "replicate".equals(cluster)) {
@@ -143,6 +150,7 @@ public class RedisRegistry extends FailbackRegistry {
         
         this.expirePeriod = url.getParameter(Constants.SESSION_TIMEOUT_KEY, Constants.DEFAULT_SESSION_TIMEOUT);
         this.expireFuture = expireExecutor.scheduleWithFixedDelay(new Runnable() {
+            @Override
             public void run() {
                 try {
                     deferExpired(); // 延长过期时间
@@ -212,6 +220,7 @@ public class RedisRegistry extends FailbackRegistry {
         }
     }
 
+    @Override
     public boolean isAvailable() {
         for (JedisPool jedisPool : jedisPools.values()) {
             try {

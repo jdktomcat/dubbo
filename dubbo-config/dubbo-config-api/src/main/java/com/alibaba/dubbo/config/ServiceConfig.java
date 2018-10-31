@@ -129,6 +129,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         }
         if (delay != null && delay > 0) {
             Thread thread = new Thread(new Runnable() {
+                @Override
                 public void run() {
                     try {
                         Thread.sleep(delay);

@@ -202,7 +202,9 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
 					throw new IllegalStateException("Unload " + resolveFile + ", cause: " + e.getMessage(), e);
 				} finally {
 				    try {
-                        if(null != fis) fis.close();
+                        if(null != fis){
+                            fis.close();
+                        }
                     } catch (IOException e) {
                         logger.warn(e.getMessage(), e);
                     }
